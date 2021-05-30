@@ -9,10 +9,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       pokeList: [],
-      typesList: []
+      typesList: [],
+      selected: ''
     };
     this.getAllPokemon = this.getAllPokemon.bind(this);
     this.getAllTypes = this.getAllTypes.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    this.getOneType = this.getOneType.bind(this);
   }
 
   componentDidMount() {
@@ -46,13 +49,42 @@ class App extends React.Component {
     })
   }
 
+  handleSelect(e) {
+    e.preventDefault();
+    this.setState({
+      selected: e.target.value
+    }, () => this.getOneType(this.state.selected));
+    // console.log('hello');
+    // console.log('state selected', this.state.selected);
+    // console.log('state selected key', this.state.selected.key);
+    // console.log('e target id', e.target);
+    // console.log('e target', e.target);
+    // console.log('this.state.selected', this.state.selected);
+    // this.getOneType();
+
+    this.getOneType(this.state.selected);
+  }
+
+  getOneType(name) {
+    axios.get(`/api/${name}`)
+    .then(data => {
+      this.setState({
+        pokeList: data.data
+      });
+      // console.log('data', this.state.pokeList);
+    })
+    .catch(err => {
+      console.log('err getting one type', err);
+    })
+  }
+
 
   render() {
     return (
       <div>
         <h1>Fullstack Pokedex!</h1>
-        <button>Show All</button>
-        <select id="types">
+        <button onClick={this.getAllPokemon}>Show All</button>
+        <select id="types" onChange={this.handleSelect}>
           <option>Sort by Type</option>
           {this.state.typesList.map(type => (
             <TypeOption type={type.type} key={type.id} />

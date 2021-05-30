@@ -46,3 +46,10 @@ app.get('/api/types', (req, res) => {
     err ? res.status(400).send(err) : res.status(200).send(data);
   });
 })
+
+app.get('/api/:id', (req, res) => {
+  var { id } = req.params;
+  controllers.getAllOfOneType(id, (err, data) => {
+    err ? res.status(400).send(err) : res.status(200).send(data);
+  });
+})

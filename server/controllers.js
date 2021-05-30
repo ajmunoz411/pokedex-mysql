@@ -24,6 +24,13 @@ const controllers = {
     db.query(queryStr, (err, data) => {
       err ? callback(err) : callback(null, data);
     })
+  },
+
+  getAllOfOneType: (name, callback) => {
+    var queryStr = `SELECT pokemon.id, pokemon.name, types.type, images.img FROM pokemon INNER JOIN types ON pokemon.typeNum = types.id INNER JOIN images ON pokemon.imageNum = images.id WHERE types.type="${name}";`;
+    db.query(queryStr, (err, data) => {
+      err ? callback(err) : callback(null, data);
+    })
   }
 
 };
